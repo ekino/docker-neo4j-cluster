@@ -1,0 +1,2 @@
+dns/dnsmasq.d/*
+!dns/dnsmasq.d/.gitkeep
