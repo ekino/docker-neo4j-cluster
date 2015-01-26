@@ -18,6 +18,7 @@ For more informations :
 
 ## TL;DR
 
+If you are on linux :
 ```bash
 # start a neo4j cluster w/ 3 nodes
 curl -sSL https://raw.githubusercontent.com/ekino/docker-neo4j-cluster/master/helper.sh | bash -s run:neomaster,neoreadslave,neobackup

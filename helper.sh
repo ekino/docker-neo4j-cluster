@@ -68,8 +68,9 @@ do
       echo -e "${reset}"
       ;;
     'clear')
-      echo -e "\n${cyan}==> Killing and deleting *ALL* containers${reset}"
+      echo -e "\n${cyan}==> Killing running containers${reset}"
       docker kill $(docker ps | awk 'NR!=1{print $1}')
+      echo -e "\n${cyan}==> Removing *all* containers${reset}"
       docker rm $(docker ps -a| awk 'NR!=1{print $1}')
       rm -f $cnf/*
       echo -e "\n${cyan}==> Removing untagged/dangled images${reset}"
