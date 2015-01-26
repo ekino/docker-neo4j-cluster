@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 RUN apt-get install -y wget curl
 
-# install elasticsearch
+# install neo4j
 RUN wget -O - http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
 RUN echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
 RUN apt-get update -y
