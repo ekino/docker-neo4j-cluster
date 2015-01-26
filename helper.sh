@@ -10,6 +10,7 @@ red="$(tput setaf 1)"
 reset="$(tput sgr0)"
 
 cnf='dns/dnsmasq.d'
+bdd='node/data'
 
 for args in $@
 do
@@ -37,9 +38,11 @@ do
       do
         IFS=$OIFS
         iter=$((iter+1))
+        datadir="$bdd/$node"
+        mkdir -p $datadir
         # Create new cluster node
         echo "--> Run node '$node'"
-        docker run --name $node -h $node --dns $localdns -e SERVER_ID=$iter -e CLUSTER_NODES=$nodes -P -d ekino/neo4j-cluster:latest
+        docker run --name $node -h $node --dns $localdns -e SERVER_ID=$iter -e CLUSTER_NODES=$nodes -v $(readlink -f $datadir):/var/lib/neo4j/data/  -P -d ekino/neo4j-cluster:latest
         # Add new node to DNS server
         echo "--> Register node '$node'"
         echo "host-record=$node,$(docker inspect --format {{.NetworkSettings.IPAddress}} $node)" | tee $cnf/50_docker_$node
@@ -72,7 +75,9 @@ do
       docker kill $(docker ps | awk 'NR!=1{print $1}')
       echo -e "\n${cyan}==> Removing *all* containers${reset}"
       docker rm $(docker ps -a| awk 'NR!=1{print $1}')
+      echo -e "\n${cyan}==> Cleaning all data files (dns + graphdb)${reset}"
       rm -f $cnf/*
+      rm -rf "$bdd"
       echo -e "\n${cyan}==> Removing untagged/dangled images${reset}"
       [ "${1#*:}" = "all" ] && docker rmi $(docker images -f dangling=true | awk 'NR!=1{print $3}')
       ;;
