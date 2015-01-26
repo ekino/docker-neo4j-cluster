@@ -80,6 +80,3 @@ Arguments can be added to the commandline. They will be processed in order.
 ./helper.sh clear:all build run:neo1,neo2,neo3
 ```
 
-## Usage
-
-Open your browser to http://localhost:7474
