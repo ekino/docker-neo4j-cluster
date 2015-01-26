@@ -6,30 +6,34 @@ Get a Neo4J cluster in no time.
 
 ## Licensing
 
-This repo uses Neo4J Enterprise, installed following this official and publicly
+This repo uses Neo4J Enterprise, installed following the official and publicly
 available page http://debian.neo4j.org/.
 
-You **must** have a license to use Neo4J Enterprise, and as a consequence for
+You **must** have a license to use Neo4J Enterprise, and as a consequence to use
 this repo.
 
 For more informations :
 - Licenses :  http://neo4j.com/subscriptions/
 - Contact : http://neo4j.com/contact-us/
 
-## Prerequisites
+## TL;DR
 
-Install docker and clone the repo :
 ```bash
-command -v docker || curl http://get.docker.com/ | sh
+# start a neo4j cluster w/ 3 nodes
+curl -sSL https://raw.githubusercontent.com/ekino/docker-neo4j-cluster/master/helper.sh | bash -s run:neomaster,neoreadslave,neobackup
+```
+
+## Cluster Creation
+
+### Prerequisites
+
+Clone the repo :
+```bash
 git clone git@github.com:ekino/docker-neo4j-cluster.git neo4j-cluster
 cd neo4j-cluster
 ```
 
-## Init Cluster
-
-Cluster nodes needs to talk to each other. So either we use etcd (or
-similar project) or we use dnsmasq. This README only talks about the simple
-poor's man approach: *dnsmasq*.
+### Cluster initialisation (manual)
 
 ```bash
 # Build dns server image (so nodes can communicate to each others)
@@ -60,11 +64,11 @@ docker ps
 http://localhost:<FORWARDED_PORT>/webadmin/#/info/org.neo4j/High%20Availability/
 ```
 
-## Helper
+### Cluster initialisation (auto)
 
 `WARNING: Before you proceed, be aware the 'clear' argument kills and rm all docker containers !`
 
-For convinience, you can use the helper.sh file to remove old or running container, build new images
+For convinience, you can use the helper.sh file to remove old or running container, build new images,
 start the new containers and/or check the cluster configuration.
 
 Arguments :
@@ -76,7 +80,17 @@ Arguments :
 Arguments can be added to the commandline. They will be processed in order.
 
 ```bash
-# The all in one command (/!\ it remove all your containers /!\)
+# oneline command equivalent to manual install above : (/!\ it remove all your containers /!\)
 ./helper.sh clear:all build run:neo1,neo2,neo3
 ```
 
+## Cluster Usage
+
+Either use `neo4j-shell` command, http dashboard or rest api...
+
+## The End ?
+
+For this POC, we have used `dnsmasq` so the nodes can talk to each other.
+but we could have used more complex but powerful tools like `etcd`, `consul`, ....
+
+Next, we'll talk about data persistence and neo4j extensions.

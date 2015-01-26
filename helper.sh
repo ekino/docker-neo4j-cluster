@@ -1,6 +1,8 @@
 #!/bin/bash
 #set -x
 
+command -v docker || curl http://get.docker.com/ | sh
+
 cyan="$(tput setaf 6)"
 green="$(tput setaf 2)"
 bgreen="$(tput bold ; tput setaf 2)"
