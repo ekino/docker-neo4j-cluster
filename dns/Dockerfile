@@ -9,7 +9,7 @@ RUN apt-get update
 RUN apt-get install -y supervisor
 
 # install dnsmasq
-RUN apt-get install -y dnsmasq
+RUN apt-get install -y dnsmasq inotify-tools
 
 # cleanup
 RUN apt-get clean
@@ -20,6 +20,8 @@ ADD supervisord.conf /etc/supervisor/conf.d/dnsmasq.conf
 ADD dnsmasq.conf /etc/dnsmasq.conf
 ADD dnsmasq.d /etc/dnsmasq.d
 ADD start.sh /start.sh
+
+ADD restartdns.sh /restartdns.sh
 
 EXPOSE 53
 

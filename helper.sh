@@ -51,10 +51,6 @@ do
         docker logs $node
       done
 
-      # Restart DNS server to register new nodes
-      echo -e "\n${cyan}==> Restarting DNS service${reset}"
-      docker exec neodns supervisorctl restart dnsmasq
-
       # Wait.. and check last started node
       w=45
       echo -e "\n${cyan}==> Waiting ${w}s (cluster warmup)${reset}"
@@ -81,6 +77,17 @@ do
       echo -e "\n${cyan}==> Removing untagged/dangled images${reset}"
       [ "${1#*:}" = "all" ] && docker rmi $(docker images -f dangling=true | awk 'NR!=1{print $3}')
       ;;
+    'inotify')
+      # test the inotify on dnsmasq
+      docker run --name neodns -h neodns -v $(readlink -f dns/dnsmasq.d):/etc/dnsmasq.d -d ekino/dnsmasq:latest
+      localdns=$(docker inspect --format {{.NetworkSettings.IPAddress}} neodns)
+      docker run --name neo1 -h neo1 --dns $localdns -e SERVER_ID=1 -e CLUSTER_NODES=neo1,neo2,neo3 -P -d ekino/neo4j-cluster:latest
+      docker run --name neo2 -h neo2 --dns $localdns -e SERVER_ID=2 -e CLUSTER_NODES=neo1,neo2,neo3 -P -d ekino/neo4j-cluster:latest
+      sleep 5
+      echo "host-record=neo2,$(docker inspect --format {{.NetworkSettings.IPAddress}} neo2)" | tee dns/dnsmasq.d/50_docker_neo2
+      sleep 5
+      docker exec -t neodns cat /restartdns.log
+      docker exec -t neo1 ping -c 4 neo2
   esac
   shift
 done 3>&1 1>&2 2>&3 | awk '{print "'$red'" $0 "'$reset'"}'
