@@ -13,6 +13,7 @@ test:
     - docker logs neo2
     - docker logs neo3
   override:
+    - sleep 60 # nodes take more time to warmup on circleci
     - curl localhost:$(docker ps | grep neo1 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
     - curl localhost:$(docker ps | grep neo2 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
     - curl localhost:$(docker ps | grep neo3 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
