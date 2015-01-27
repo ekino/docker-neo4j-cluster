@@ -1,3 +1,11 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+
 test:
   override:
     - ./helper.sh build run:neo1,neo2,neo3
