@@ -2,6 +2,14 @@
 #set -x
 
 command -v docker || curl http://get.docker.com/ | sh
+# debugging circleci builds
+docker version
+ps auxf  | grep -C 10 docker
+uname -a
+lsb_release -a
+whoami
+pwd
+######
 
 cyan="$(tput setaf 6)"
 green="$(tput setaf 2)"
