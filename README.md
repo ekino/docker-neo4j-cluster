@@ -1,5 +1,7 @@
 # ekino/neo4j-cluster
 
+[![Circle CI](https://circleci.com/gh/ekino/docker-neo4j-cluster.svg?style=svg)](https://circleci.com/gh/ekino/docker-neo4j-cluster)
+
 ## Description
 
 Get a Neo4J cluster in no time.
