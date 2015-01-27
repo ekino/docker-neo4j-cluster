@@ -8,6 +8,8 @@ dependencies:
 
 test:
   pre:
-    - ./helper.sh build run:neo1,neo2,neo3
+    - ./helper.sh clear:all build run:neo1,neo2,neo3
   override:
-    - for i in $(docker ps | grep 7474 | sed -r 's/.*:(.....)->7474.*/\1/'); do curl -sSL http://localhost:$i; done
+    - curl localhost:$(docker ps | grep 7474 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
+    - curl localhost:$(docker ps | grep 7474 | sed -rn '2s/.*:(.....)->7474.*/\1/p')
+    - curl localhost:$(docker ps | grep 7474 | sed -rn '3s/.*:(.....)->7474.*/\1/p')

@@ -76,8 +76,8 @@ do
       echo -e "\n${cyan}==> Removing *all* containers${reset}"
       docker rm $(docker ps -a| awk 'NR!=1{print $1}')
       echo -e "\n${cyan}==> Cleaning all data files (dns + graphdb)${reset}"
-      rm -f $cnf/*
-      rm -rf "$bdd"
+      sudo rm -f $cnf/*
+      sudo rm -rf "$bdd"
       echo -e "\n${cyan}==> Removing untagged/dangled images${reset}"
       [ "${1#*:}" = "all" ] && docker rmi $(docker images -f dangling=true | awk 'NR!=1{print $3}')
       ;;
