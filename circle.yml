@@ -1,4 +1,3 @@
 test:
   override:
-    - './helper.sh build run:neo1,neo2,neo3':
-      timeout: 300
+    - ./helper.sh build run:neo1,neo2,neo3
