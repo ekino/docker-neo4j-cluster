@@ -5,11 +5,14 @@ machine:
 dependencies:
   override:
     - docker info
+    - ./helper.sh clear:all build run:neo1,neo2,neo3
 
 test:
   pre:
-    - ./helper.sh clear:all build run:neo1,neo2,neo3
+    - docker logs neo1
+    - docker logs neo2
+    - docker logs neo3
   override:
-    - curl localhost:$(docker ps | grep 7474 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
-    - curl localhost:$(docker ps | grep 7474 | sed -rn '2s/.*:(.....)->7474.*/\1/p')
-    - curl localhost:$(docker ps | grep 7474 | sed -rn '3s/.*:(.....)->7474.*/\1/p')
+    - curl localhost:$(docker ps | grep neo1 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
+    - curl localhost:$(docker ps | grep neo2 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
+    - curl localhost:$(docker ps | grep neo3 | sed -rn '1s/.*:(.....)->7474.*/\1/p')
