@@ -13,7 +13,7 @@ test:
     - docker logs neo2
     - docker logs neo3
   override:
-    - sleep 60 # nodes take more time to warmup on circleci
+    - sleep 120 # nodes take more time to warmup on circleci
     - curl localhost:$(docker inspect --format '{{ range $key, $value := .NetworkSettings.Ports }}{{ if eq $key "7474/tcp" }}{{ (index $value 0).HostPort }} {{ end }}{{ end }}' neo1)
     - curl localhost:$(docker inspect --format '{{ range $key, $value := .NetworkSettings.Ports }}{{ if eq $key "7474/tcp" }}{{ (index $value 0).HostPort }} {{ end }}{{ end }}' neo2)
     - curl localhost:$(docker inspect --format '{{ range $key, $value := .NetworkSettings.Ports }}{{ if eq $key "7474/tcp" }}{{ (index $value 0).HostPort }} {{ end }}{{ end }}' neo3)
