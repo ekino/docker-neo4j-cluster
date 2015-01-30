@@ -55,7 +55,7 @@ do
       w=45
       echo -e "\n${cyan}==> Waiting ${w}s (cluster warmup)${reset}"
       sleep $w
-      docker exec -ti $(docker ps -l | awk 'NR!=1{print $1}') curl http://localhost:7474
+      docker exec -ti $(docker ps -lq) curl http://localhost:7474
 
       # Display webadmin URLs
       echo -e "\n\n${cyan}==> Check each node's HA setup and availability using urls below${reset}"
@@ -68,14 +68,14 @@ do
       ;;
     'clear')
       echo -e "\n${cyan}==> Killing running containers${reset}"
-      docker kill $(docker ps | awk 'NR!=1{print $1}')
+      docker kill $(docker ps -q)
       echo -e "\n${cyan}==> Removing *all* containers${reset}"
-      docker rm $(docker ps -a| awk 'NR!=1{print $1}')
+      docker rm $(docker ps -aq)
       echo -e "\n${cyan}==> Cleaning all data files (dns + graphdb)${reset}"
       sudo rm -f $cnf/*
       sudo rm -rf "$bdd"
       echo -e "\n${cyan}==> Removing untagged/dangled images${reset}"
-      [ "${1#*:}" = "all" ] && docker rmi $(docker images -f dangling=true | awk 'NR!=1{print $3}')
+      [ "${1#*:}" = "all" ] && docker rmi $(docker images -qf dangling=true)
       ;;
     'inotify')
       # test the inotify on dnsmasq
