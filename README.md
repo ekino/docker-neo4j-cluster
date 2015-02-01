@@ -71,7 +71,7 @@ http://localhost:<FORWARDED_PORT>/webadmin/#/info/org.neo4j/High%20Availability/
 
 `WARNING: Before you proceed, be aware the 'clear' argument kills and rm all docker containers !`
 
-For convinience, you can use the helper.sh file to remove old or running container, build new images,
+For convenience, you can use the helper.sh file to remove old or running container, build new images,
 start the new containers and/or check the cluster configuration.
 
 Arguments :
