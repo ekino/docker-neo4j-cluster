@@ -12,6 +12,12 @@ reset="$(tput sgr0)"
 cnf='dns/dnsmasq.d'
 bdd='node/data'
 
+# if not executed through "curl xxx | bash" move to script folder...
+[[ ! "$0" = "bash" ]] && [[ -f "$0" ]] && cd "$(readlink -f `dirname $0`)"
+# if no path found, create them in /tmp
+[[ ! -d "$cnf" ]] && cnf="/tmp/$cnf"
+[[ ! -d "$bdd" ]] && bdd="/tmp/$bdd"
+
 for args in $@
 do
   case ${1%:*} in
