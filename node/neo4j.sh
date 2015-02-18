@@ -1,14 +1,6 @@
 #!/bin/bash
 
-echo "
-        _    _
-    ___| | _(_)_ __   ___
-   / _ \ |/ / | '_ \ / _ \ 
-  |  __/   <| | | | | (_) |
-   \___|_|\_\_|_| |_|\___(_)
-
-"
-#set -x
+echo "$green ==> Starting ekino/neo4-cluster:base$reset"
 
 # Check of env variable. Complains+Help if missing
 if [ -z "$SERVER_ID" ]; then
@@ -19,14 +11,14 @@ if [ -z "$SERVER_ID" ]; then
 fi
 
 # Customize config
-echo "==> Setting server IP config"
+echo "$cyan --> Setting server IP config$reset"
 CONFIG_FILE=/etc/neo4j/neo4j.properties
 SERVER_IP=$(ip route get 8.8.8.8 | awk 'NR==1{print $NF}')
 
 sed -i 's/SERVER_ID/'$SERVER_ID'/' $CONFIG_FILE
 sed -i 's/SERVER_IP/'$SERVER_IP'/' $CONFIG_FILE
 
-echo "==> Global settings"
+echo "$cyan --> Global settings$reset"
 if [ "$SERVER_ID" = "1" ]; then
   # All this node to init the cluster all alone (initial_hosts=127.0.0.1)
   sed -i '/^ha.allow_init_cluster/s/false/true/' $CONFIG_FILE
@@ -43,7 +35,7 @@ if [ ! -z "$CLUSTER_NODES" ]; then
 fi
 IFS=$OIFS
 
-echo "==> Server settings"
+echo "$cyan --> Server settings$reset"
 sed -i 's/^#\(org.neo4j.server.database.mode=\)/\1/' /etc/neo4j/neo4j-server.properties
 
 if [ "$REMOTE_HTTP" = "true" ]; then
@@ -56,7 +48,7 @@ fi
 
 # Review config (for docker logs)
 
-echo "==> Settings review"
+echo "$cyan --> Settings review$reset"
 echo
 (
 echo " --- $(hostname) ---"
@@ -68,6 +60,3 @@ ip addr | awk '/inet /{print $2}'
 ) | awk '{print "   review> "$0}'
 echo
 
-echo "==> Starting Neo4J server (with supervisord)"
-echo
-supervisord -n
