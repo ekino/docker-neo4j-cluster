@@ -30,18 +30,18 @@ echo "==> Global settings"
 if [ "$SERVER_ID" = "1" ]; then
   # All this node to init the cluster all alone (initial_hosts=127.0.0.1)
   sed -i '/^ha.allow_init_cluster/s/false/true/' $CONFIG_FILE
-else
-  OIFS=$IFS
-  if [ ! -z "$CLUSTER_NODES" ]; then
-    IFS=','
-    for i in $CLUSTER_NODES
-    do
-      sed -i '/^ha.initial_hosts/s/$/'${i%%_*}':5001,/' $CONFIG_FILE
-    done
-    sed -i '/^ha.initial_hosts/s/,$//' $CONFIG_FILE
-  fi
-  IFS=$OIFS
 fi
+
+OIFS=$IFS
+if [ ! -z "$CLUSTER_NODES" ]; then
+  IFS=','
+  for i in $CLUSTER_NODES
+  do
+    sed -i '/^ha.initial_hosts/s/$/'${i%%_*}':5001,/' $CONFIG_FILE
+  done
+  sed -i '/^ha.initial_hosts/s/,$//' $CONFIG_FILE
+fi
+IFS=$OIFS
 
 echo "==> Server settings"
 sed -i 's/^#\(org.neo4j.server.database.mode=\)/\1/' /etc/neo4j/neo4j-server.properties
