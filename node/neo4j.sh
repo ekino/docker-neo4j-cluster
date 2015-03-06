@@ -2,11 +2,19 @@
 
 echo "$green ==> Starting ekino/neo4-cluster:base$reset"
 
+if [ -f "/.settings.lock" ]
+then
+  echo "$cyan ==> First setup already done, nothing to do. Proceeding !$reset"
+  exit
+fi
+
 # Check of env variable. Complains+Help if missing
 if [ -z "$SERVER_ID" ]; then
+  echo >&2 "$red"
   echo >&2 "--------------------------------------------------------------------------------"
   echo >&2 "- Missing mandatory SERVER_ID ( for example : docker run -e SERVER_ID=2 .... ) -"
   echo >&2 "--------------------------------------------------------------------------------"
+  echo >&2 "$reset"
   exit 1
 fi
 
@@ -16,7 +24,7 @@ CONFIG_FILE=/etc/neo4j/neo4j.properties
 SERVER_IP=$(ip route get 8.8.8.8 | awk 'NR==1{print $NF}')
 
 sed -i 's/SERVER_ID/'$SERVER_ID'/' $CONFIG_FILE
-sed -i 's/SERVER_IP/'$SERVER_IP'/' $CONFIG_FILE
+sed -i 's/SERVER_IP/0.0.0.0/' $CONFIG_FILE
 
 echo "$cyan --> Global settings$reset"
 if [ "$SERVER_ID" = "1" ]; then
@@ -59,4 +67,6 @@ echo "Network settings :"
 ip addr | awk '/inet /{print $2}'
 ) | awk '{print "   review> "$0}'
 echo
+
+touch /.settings.lock
 
