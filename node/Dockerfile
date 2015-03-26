@@ -4,11 +4,12 @@ FROM ekino/base
 MAINTAINER Matthieu Fronton <fronton@ekino.com>
 
 ENV DEBIAN_FRONTEND noninteractive
+ENV NEO4J_VERSION 2.1.7
 
 # install neo4j
 RUN curl -sSL http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
 RUN echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
-RUN apt-get update -y && apt-get install -y neo4j-enterprise neo4j-arbiter supervisor
+RUN apt-get update -y && apt-get install -y neo4j-enterprise=$NEO4J_VERSION neo4j-arbiter=$NEO4J_VERSION supervisor
 
 # cleanup
 RUN apt-get autoremove -y wget
