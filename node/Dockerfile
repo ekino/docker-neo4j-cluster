@@ -10,6 +10,7 @@ ENV NEO4J_VERSION 2.1.7
 RUN curl -sSL http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
 RUN echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/neo4j.list
 RUN apt-get update -y && apt-get install -y neo4j-enterprise=$NEO4J_VERSION neo4j-arbiter=$NEO4J_VERSION supervisor
+RUN apt-get install -y openjdk-7-jdk
 
 # cleanup
 RUN apt-get autoremove -y wget
