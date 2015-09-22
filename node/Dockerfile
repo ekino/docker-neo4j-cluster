@@ -12,7 +12,7 @@ RUN echo 'deb http://debian.neo4j.org/repo stable/' > /etc/apt/sources.list.d/ne
 RUN apt-get update -y && apt-get install -y neo4j-enterprise=$NEO4J_VERSION neo4j-arbiter=$NEO4J_VERSION supervisor
 
 # cleanup
-RUN apt-get autoremove -y wget
+RUN apt-get remove -y wget
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
