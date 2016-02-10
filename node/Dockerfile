@@ -1,10 +1,10 @@
 # --- NEO4J CLUSTER ---
 
-FROM ekino/java7:groovy
+FROM ekino/java:oracle8
 MAINTAINER Matthieu Fronton <fronton@ekino.com>
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV NEO4J_VERSION 2.1.7
+ENV NEO4J_VERSION 2.3.2
 
 # install neo4j
 RUN curl -sSL http://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
